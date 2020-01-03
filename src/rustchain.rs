@@ -1,5 +1,5 @@
 pub mod chain;
 pub mod transaction;
 mod merkletree;
-pub mod hash;
+mod hash;
 pub mod miner;

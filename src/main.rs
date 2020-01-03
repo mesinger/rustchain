@@ -1,7 +1,7 @@
 mod rustchain;
 
 use rustchain::transaction::Transaction;
-use crate::rustchain::miner::{initializeBlock, searchAndVerifyNonce};
+use crate::rustchain::miner::{initializeBlock, searchVerifiedNonce};
 use crate::rustchain::chain::BlockChain;
 
 fn main() {
@@ -22,7 +22,7 @@ fn main() {
     let mut blockChain = BlockChain::new();
     let mut block = initializeBlock(&blockChain, transactions);
 
-    let verifiedNonce = searchAndVerifyNonce(block.header.previousHash, block.header.nonce, block.header.transactionsHash, block.header.target, |nonce| nonce + 1);
+    let verifiedNonce = searchVerifiedNonce(block.header.previousHash, block.header.nonce, block.header.transactionsHash, block.header.target, |nonce| nonce + 1);
     println!("nonce verified = {}", verifiedNonce);
     block.header.nonce = verifiedNonce;
     println!("blockchain accepted block = {}", blockChain.addBlock(block));

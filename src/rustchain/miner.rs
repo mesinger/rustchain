@@ -25,7 +25,7 @@ pub fn initializeBlock(blockChain: &BlockChain, transactions: Vec<Box<Transactio
 //    block.header.nonce
 //}
 
-pub fn searchAndVerifyNonce<F : Fn(u128) -> u128>(previousHash : u128, initialNonce : u128, transactionHash : u128, target : u128, nonceModifier : F) -> u128 {
+pub fn searchVerifiedNonce<F : Fn(u128) -> u128>(previousHash : u128, initialNonce : u128, transactionHash : u128, target : u128, nonceModifier : F) -> u128 {
     let mut nonce = initialNonce;
     while blockHash(previousHash, nonce, transactionHash) > target {
         nonce = nonceModifier(nonce);
