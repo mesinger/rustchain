@@ -1,7 +1,8 @@
 mod rustchain;
 
 use rustchain::transaction::Transaction;
-use crate::rustchain::hash::RustChainHash;
+use crate::rustchain::miner::{initializeBlock, searchAndVerifyNonce};
+use crate::rustchain::chain::BlockChain;
 
 fn main() {
     let trans1 = Box::new(Transaction{
@@ -16,6 +17,13 @@ fn main() {
         amount: 0.5
     });
 
-    println!("Transaction 1 Hash = {}", trans1.hash());
-    println!("Transaction 2 Hash = {}", trans2.hash());
+    let transactions = vec![trans1, trans2];
+
+    let mut blockChain = BlockChain::new();
+    let mut block = initializeBlock(&blockChain, transactions);
+
+    let verifiedNonce = searchAndVerifyNonce(block.header.previousHash, block.header.nonce, block.header.transactionsHash, block.header.target, |nonce| nonce + 1);
+    println!("nonce verified = {}", verifiedNonce);
+    block.header.nonce = verifiedNonce;
+    println!("blockchain accepted block = {}", blockChain.addBlock(block));
 }
